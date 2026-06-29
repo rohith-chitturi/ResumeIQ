@@ -14,7 +14,13 @@ To build a modular, scalable, and production-ready AI Resume Analyzer with a pre
 - **Pydantic** (Data Validation)
 
 ## Phase 1
-- Initialized Project Architecture
-- Set up Virtual Environment & Dependencies
-- Created Premium Streamlit Landing Page
-- Initialized Git Repository
+- [x] Initialized Project Architecture
+- [x] Set up Virtual Environment & Dependencies
+- [x] Created Premium Streamlit Landing Page
+- [x] Initialized Git Repository
+
+## Phase 2
+- [x] Built `PDFParser` using PyMuPDF (fitz)
+- [x] Handled byte streams for direct Streamlit compatibility
+- [x] Removed Null bytes and handled whitespace cleaning
+- [x] Created unit tests for the parser using `pytest`
