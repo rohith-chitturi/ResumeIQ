@@ -1,7 +1,13 @@
 import streamlit as st
 import time
 from parser.pdf_parser import PDFParser
+from embedding.vectorizer import EmbeddingService
+from similarity.matcher import SemanticMatcher
 
+@st.cache_resource
+def get_embedding_service():
+    """Caches the EmbeddingService so the model is only loaded once per session."""
+    return EmbeddingService()
 # Set page configuration must be the first Streamlit command
 st.set_page_config(
     page_title="ResumeIQ - AI Resume Analyzer",
@@ -156,9 +162,30 @@ def main():
                 with st.expander("📄 View Extracted Text (For Debugging)"):
                     st.text_area("Parsed Text", extracted_text, height=300, disabled=True)
                 
-                # We will trigger the actual analysis in the next phases
-                if st.button("🚀 Analyze Resume with Gemini AI", use_container_width=True):
-                    st.info("The AI Analysis pipeline (Embeddings + LLM) will be connected in Phase 3!")
+                # We trigger the actual analysis
+                if st.button("🚀 Analyze Resume with AI", use_container_width=True):
+                    if not job_description.strip():
+                        st.warning("⚠️ Please paste a Job Description to see the match percentage.")
+                    else:
+                        with st.spinner("🧠 Generating Semantic Embeddings..."):
+                            embedder = get_embedding_service()
+                            resume_emb = embedder.generate_embedding(extracted_text)
+                            jd_emb = embedder.generate_embedding(job_description)
+                            
+                            score = SemanticMatcher.calculate_similarity(resume_emb, jd_emb)
+                            match_percent = int(score * 100)
+                            
+                            st.markdown("---")
+                            st.markdown("### 📊 Analysis Results")
+                            
+                            # Beautiful animated metric
+                            col_metric, col_dummy = st.columns([1, 3])
+                            with col_metric:
+                                st.metric(label="Semantic Match Score", value=f"{match_percent}%", delta="vs Job Description")
+                            
+                            st.progress(score, text="Match Percentage")
+                            
+                            st.info("✨ In Phase 4, we will use Gemini LLM to rewrite your bullet points and provide ATS feedback!")
             else:
                 st.error("Failed to extract text from the PDF. The file might be corrupted or scanned as an image.")
 
