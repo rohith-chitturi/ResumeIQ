@@ -3,11 +3,17 @@ import time
 from parser.pdf_parser import PDFParser
 from embedding.vectorizer import EmbeddingService
 from similarity.matcher import SemanticMatcher
+from llm.gemini_service import GeminiService
 
 @st.cache_resource
 def get_embedding_service():
     """Caches the EmbeddingService so the model is only loaded once per session."""
     return EmbeddingService()
+
+@st.cache_resource
+def get_gemini_service():
+    """Caches the GeminiService."""
+    return GeminiService()
 # Set page configuration must be the first Streamlit command
 st.set_page_config(
     page_title="ResumeIQ - AI Resume Analyzer",
@@ -185,7 +191,34 @@ def main():
                             
                             st.progress(score, text="Match Percentage")
                             
-                            st.info("✨ In Phase 4, we will use Gemini LLM to rewrite your bullet points and provide ATS feedback!")
+                        # Now call Gemini
+                        with st.spinner("🤖 Analyzing resume with Gemini..."):
+                            llm_service = get_gemini_service()
+                            if llm_service.client is None:
+                                st.error("Gemini API Key is missing. Please set it in your .env file.")
+                            else:
+                                feedback = llm_service.analyze_resume(extracted_text, job_description)
+                                
+                                if feedback:
+                                    st.markdown("---")
+                                    st.markdown("### 📝 ATS Feedback")
+                                    st.info(feedback.match_summary)
+                                    
+                                    col_skills, col_bullets = st.columns(2)
+                                    
+                                    with col_skills:
+                                        st.markdown("#### 🎯 Missing Skills")
+                                        for skill in feedback.missing_skills:
+                                            # Using a nice pill-like tag design
+                                            st.markdown(f"<span style='background-color: #8a2be2; padding: 5px 10px; border-radius: 15px; font-size: 0.9em; margin-right: 5px; display: inline-block; margin-bottom: 5px;'>{skill}</span>", unsafe_allow_html=True)
+                                            
+                                    with col_bullets:
+                                        st.markdown("#### ✨ Bullet Point Improvements")
+                                        for i, bullet in enumerate(feedback.bullet_point_improvements):
+                                            st.markdown(f"**{i+1}.** {bullet}")
+                                            
+                                else:
+                                    st.error("Failed to generate feedback from Gemini. Check the logs.")
             else:
                 st.error("Failed to extract text from the PDF. The file might be corrupted or scanned as an image.")
 
