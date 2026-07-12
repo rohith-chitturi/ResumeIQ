@@ -1,5 +1,6 @@
 import streamlit as st
 import time
+from parser.pdf_parser import PDFParser
 
 # Set page configuration must be the first Streamlit command
 st.set_page_config(
@@ -129,14 +130,37 @@ def main():
         """, unsafe_allow_html=True)
 
     st.markdown("---")
-    st.markdown("### 📤 Upload Your Resume")
-    st.info("The upload and analysis pipeline will be implemented in the next phase!")
-
-    # A simple demo button with loading animation
-    if st.button("Start Analysis (Demo)"):
-        with st.spinner("Initializing AI Engines..."):
-            time.sleep(1.5)
-            st.success("ResumeIQ is ready for development!")
+    st.markdown("### 📤 Upload Your Resume & Job Description")
+    
+    col_upload, col_jd = st.columns(2)
+    
+    with col_upload:
+        uploaded_file = st.file_uploader("Upload your PDF resume", type=["pdf"], help="Limit 5MB. Only PDF files are supported.")
+    
+    with col_jd:
+        job_description = st.text_area("Paste the Job Description (Optional)", height=100, placeholder="Paste the target job description here to see semantic matching...")
+        
+    if uploaded_file is not None:
+        st.success(f"File '{uploaded_file.name}' uploaded successfully!")
+        
+        with st.spinner("Extracting text from PDF..."):
+            # Read the file bytes directly (no saving to disk!)
+            pdf_bytes = uploaded_file.read()
+            
+            # Extract text using our single-responsibility parser
+            extracted_text = PDFParser.extract_text_from_bytes(pdf_bytes)
+            
+            if extracted_text:
+                st.session_state['resume_text'] = extracted_text
+                
+                with st.expander("📄 View Extracted Text (For Debugging)"):
+                    st.text_area("Parsed Text", extracted_text, height=300, disabled=True)
+                
+                # We will trigger the actual analysis in the next phases
+                if st.button("🚀 Analyze Resume with Gemini AI", use_container_width=True):
+                    st.info("The AI Analysis pipeline (Embeddings + LLM) will be connected in Phase 3!")
+            else:
+                st.error("Failed to extract text from the PDF. The file might be corrupted or scanned as an image.")
 
 if __name__ == "__main__":
     main()
