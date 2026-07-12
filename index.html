@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Aura AI | Premium Resume Analysis</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        :root {
+            --gemini-gradient: linear-gradient(90deg, #4b85e8, #9b59b6, #e67e22);
+        }
+        body {
+            background-color: #131314;
+            color: #e5e2e3;
+            overflow-x: hidden;
+        }
+        .glass-card {
+            background: rgba(30, 30, 32, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .glass-card:hover {
+            border-color: rgba(173, 199, 255, 0.3);
+            box-shadow: 0 0 40px rgba(75, 133, 232, 0.08);
+        }
+        .gemini-gradient-text {
+            background: var(--gemini-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .gemini-bg {
+            background: var(--gemini-gradient);
+        }
+        .glow-button:hover {
+            box-shadow: 0 0 20px rgba(75, 133, 232, 0.4);
+        }
+        .circular-progress {
+            background: conic-gradient(#adc7ff 94%, transparent 0);
+        }
+        .pulse-animation {
+            animation: pulse 2s infinite ease-in-out;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.02); }
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-background": "#e5e2e3",
+                        "inverse-primary": "#0e5bbc",
+                        "on-surface": "#e5e2e3",
+                        "surface-variant": "#353436",
+                        "on-tertiary-container": "#5a0217",
+                        "surface-container-high": "#2a2a2b",
+                        "on-error-container": "#ffdad6",
+                        "on-primary-container": "#00285c",
+                        "secondary": "#d2bcff",
+                        "on-primary-fixed-variant": "#004493",
+                        "on-secondary-fixed": "#24005a",
+                        "error-container": "#93000a",
+                        "surface-container": "#201f20",
+                        "background": "#131314",
+                        "primary-fixed": "#d8e2ff",
+                        "surface-container-highest": "#353436",
+                        "primary-container": "#568ff3",
+                        "on-secondary": "#3d008f",
+                        "primary": "#adc7ff",
+                        "on-tertiary": "#640a1d",
+                        "on-error": "#690005",
+                        "tertiary": "#ffb2b6",
+                        "surface-tint": "#adc7ff",
+                        "tertiary-fixed": "#ffdadb",
+                        "outline-variant": "#424752",
+                        "inverse-surface": "#e5e2e3",
+                        "surface-container-lowest": "#0e0e0f",
+                        "secondary-container": "#572aac",
+                        "on-tertiary-fixed": "#40000d",
+                        "on-tertiary-fixed-variant": "#832331",
+                        "surface-container-low": "#1c1b1c",
+                        "on-secondary-container": "#c5abff",
+                        "secondary-fixed-dim": "#d2bcff",
+                        "outline": "#8c909e",
+                        "surface": "#131314",
+                        "on-secondary-fixed-variant": "#5527a9",
+                        "tertiary-container": "#e26c77",
+                        "secondary-fixed": "#eaddff",
+                        "tertiary-fixed-dim": "#ffb2b6",
+                        "error": "#ffb4ab",
+                        "on-surface-variant": "#c2c6d4",
+                        "on-primary": "#002e68",
+                        "inverse-on-surface": "#313031",
+                        "primary-fixed-dim": "#adc7ff",
+                        "surface-bright": "#39393a",
+                        "surface-dim": "#131314",
+                        "on-primary-fixed": "#001a41"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "margin-desktop": "64px",
+                        "container-max": "1200px",
+                        "gutter": "24px",
+                        "base": "8px",
+                        "margin-mobile": "20px"
+                    },
+                    "fontFamily": {
+                        "display-lg": ["Outfit"],
+                        "label-sm": ["JetBrains Mono"],
+                        "body-md": ["Outfit"],
+                        "body-lg": ["Outfit"],
+                        "headline-md": ["Outfit"],
+                        "display-lg-mobile": ["Outfit"]
+                    },
+                    "fontSize": {
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                        "display-lg-mobile": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "600"}]
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+<body class="font-body-md text-body-md selection:bg-primary/30">
+<!-- WebGL Background -->
+<div class="fixed inset-0 z-0">
+<!-- STITCH_SHADER_START:ANIMATION_3 class="absolute inset-0 w-full h-full opacity-40" -->
+<div class="absolute inset-0 w-full h-full opacity-40" style="display:block;">
+<canvas id="shader-canvas-ANIMATION_3" style="display:block;width:100%;height:100%"></canvas>
+<script>
+(function() {
+  const canvas = document.getElementById('shader-canvas-ANIMATION_3');
+
+  // Sync the WebGL drawing-buffer size with the CSS-driven layout size.
+  // This fires on initial layout and whenever the element is resized.
+  function syncSize() {
+    const w = canvas.clientWidth  || 1280;
+    const h = canvas.clientHeight || 720;
+    if (canvas.width !== w || canvas.height !== h) {
+      canvas.width  = w;
+      canvas.height = h;
+    }
+  }
+  if (typeof ResizeObserver !== 'undefined') {
+    new ResizeObserver(syncSize).observe(canvas);
+  }
+  syncSize();
+
+  const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+  if (!gl) return;
+  const vs = `attribute vec2 a_position;
+varying vec2 v_texCoord;
+void main() {
+  v_texCoord = a_position * 0.5 + 0.5;
+  gl_Position = vec4(a_position, 0.0, 1.0);
+}`;
+  const fs = `precision highp float;
+varying vec2 v_texCoord;
+uniform float u_time;
+uniform vec2 u_resolution;
+
+void main() {
+    vec2 uv = v_texCoord;
+    
+    // Create a slow, pulsing organic glow effect
+    float t = u_time * 0.3;
+    
+    // Gemini-inspired gradient positions
+    vec2 p1 = vec2(0.2, 0.8) + 0.1 * vec2(cos(t), sin(t));
+    vec2 p2 = vec2(0.8, 0.2) + 0.1 * vec2(sin(t * 1.2), cos(t * 0.8));
+    vec2 p3 = vec2(0.5, 0.5) + 0.15 * vec2(cos(t * 0.7), sin(t * 1.3));
+    
+    float d1 = length(uv - p1);
+    float d2 = length(uv - p2);
+    float d3 = length(uv - p3);
+    
+    // Soft blur/glow colors
+    vec3 c1 = vec3(0.29, 0.52, 0.91); // Blue (#4B85E8)
+    vec3 c2 = vec3(0.61, 0.45, 0.95); // Purple (#9B72F3)
+    vec3 c3 = vec3(0.85, 0.40, 0.44); // Pink/Red (#D96570)
+    
+    vec3 finalColor = vec3(0.075, 0.075, 0.078); // Background base (#131314)
+    
+    finalColor += c1 * exp(-d1 * 4.0) * 0.15;
+    finalColor += c2 * exp(-d2 * 3.5) * 0.12;
+    finalColor += c3 * exp(-d3 * 5.0) * 0.1;
+    
+    gl_FragColor = vec4(finalColor, 1.0);
+}`;
+  function cs(type, src) {
+    const s = gl.createShader(type);
+    gl.shaderSource(s, src);
+    gl.compileShader(s);
+    return s;
+  }
+  const prog = gl.createProgram();
+  gl.attachShader(prog, cs(gl.VERTEX_SHADER, vs));
+  gl.attachShader(prog, cs(gl.FRAGMENT_SHADER, fs));
+  gl.linkProgram(prog);
+  gl.useProgram(prog);
+  const buf = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, 1,1]), gl.STATIC_DRAW);
+  const pos = gl.getAttribLocation(prog, 'a_position');
+  gl.enableVertexAttribArray(pos);
+  gl.vertexAttribPointer(pos, 2, gl.FLOAT, false, 0, 0);
+  const uTime = gl.getUniformLocation(prog, 'u_time');
+  const uRes = gl.getUniformLocation(prog, 'u_resolution');
+  const uMouse = gl.getUniformLocation(prog, 'u_mouse');
+
+  // u_mouse is in pixel coordinates matching u_resolution (ShaderToy convention).
+  // Shaders that need normalized coords should use: u_mouse / u_resolution.
+  let mouse = { x: canvas.width / 2, y: canvas.height / 2 };
+  window.addEventListener('mousemove', (event) => {
+    const rect = canvas.getBoundingClientRect();
+    if (rect.width && rect.height) {
+      const nx = (event.clientX - rect.left) / rect.width;
+      const ny = 1.0 - (event.clientY - rect.top) / rect.height;
+      mouse.x = nx * canvas.width;
+      mouse.y = ny * canvas.height;
+    }
+  });
+
+  function render(t) {
+    if (typeof ResizeObserver === 'undefined') syncSize();
+    gl.viewport(0, 0, canvas.width, canvas.height);
+    if (uTime) gl.uniform1f(uTime, t * 0.001);
+    if (uRes) gl.uniform2f(uRes, canvas.width, canvas.height);
+    if (uMouse) gl.uniform2f(uMouse, mouse.x, mouse.y);
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+    requestAnimationFrame(render);
+  }
+  render(0);
+})();
+</script>
+</div>
+<!-- STITCH_SHADER_END:ANIMATION_3 -->
+</div>
+<!-- SideNavBar (Authority Source: JSON) -->
+<aside class="h-screen w-64 fixed left-0 top-0 bg-surface-container/70 backdrop-blur-2xl border-r border-white/10 flex flex-col py-8 gap-4 z-50">
+<div class="px-6 mb-8 flex flex-col items-center gap-4">
+<img alt="Logo" class="w-16 h-16 rounded-xl" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAAUYdL8jOiTvlCG0W7VhOTw6vLKsE_l7h5PMlH7dr_JavjmT0r-ALsekCwFANlgB4xXVmiHzdrpzzRqqf2f8Fba3y72s3L87H70HPrc0GfctMC4C3r0eFa-gMFIUezuy2j8T8wP1-c3haFFEp_tjU76uyBhZAsInRA9fe7Mk7XMgIXTG07E28PyB3VGyraSO04RqGBJq-i6-fKhmVF0sjRF2GoDq37l7X6oGvIjBBxxeTE3Ez3lEfCj3QOqzGa5ah5iKkVKWmfZjdZ"/>
+<div class="text-center">
+<h2 class="font-display-lg text-display-lg text-on-surface text-xl">Aura AI</h2>
+<p class="font-label-sm text-label-sm text-primary">Premium Tier</p>
+</div>
+</div>
+<nav class="flex-1 space-y-2">
+<a class="bg-secondary-container/30 text-secondary border-l-4 border-secondary px-6 py-3 flex items-center gap-3 hover:bg-white/5 transition-all hover:translate-x-1 duration-300" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span>Dashboard</span>
+</a>
+<a class="text-on-surface-variant px-6 py-3 flex items-center gap-3 hover:bg-white/5 transition-all hover:translate-x-1 duration-300" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span>Analysis</span>
+</a>
+<a class="text-on-surface-variant px-6 py-3 flex items-center gap-3 hover:bg-white/5 transition-all hover:translate-x-1 duration-300" href="#">
+<span class="material-symbols-outlined">history</span>
+<span>History</span>
+</a>
+<a class="text-on-surface-variant px-6 py-3 flex items-center gap-3 hover:bg-white/5 transition-all hover:translate-x-1 duration-300" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span>Settings</span>
+</a>
+</nav>
+<div class="px-6 mt-auto">
+<button class="w-full gemini-bg text-white py-3 rounded-xl font-medium hover:scale-105 transition-transform duration-200 shadow-lg glow-button">
+                Upgrade to Pro
+            </button>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="ml-64 relative z-10 p-gutter md:p-margin-desktop min-h-screen">
+<!-- Header -->
+<header class="flex justify-between items-center mb-12">
+<div>
+<h1 class="font-display-lg text-display-lg text-on-surface">Resume Analysis</h1>
+<p class="text-on-surface-variant mt-2">Elevate your application with AI-driven intelligence.</p>
+</div>
+<div class="flex gap-4">
+<button class="w-12 h-12 glass-card rounded-full flex items-center justify-center hover:bg-surface-variant/50 transition-colors">
+<span class="material-symbols-outlined text-primary">notifications</span>
+</button>
+<button class="w-12 h-12 glass-card rounded-full flex items-center justify-center hover:bg-surface-variant/50 transition-colors">
+<span class="material-symbols-outlined text-primary">spark</span>
+</button>
+<div class="w-12 h-12 rounded-full border-2 border-primary/20 p-1 overflow-hidden">
+<img class="w-full h-full object-cover rounded-full" data-alt="A professional close-up portrait of a tech-savvy recruiter with a friendly smile, wearing minimalist modern glasses. The background is a soft-focus office with blue and purple ambient lighting to match the AI theme. High-end, clean photography with sharp focus on the subject." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBiRJ7i1azbR2CiCQ3LACp4ozS9MlPPb3FpI5om6bcwM6ObdVWVraQLdNBQqGgPl-Hw8RXnQ1WIVAw22d5wsFtW7SIDgoQT7qmYwF5Pp6UC7HfVZVA616M1TjfPDTYT1cLk9p5KxNqxigNnQQu6rgp_0D2AXxOTGrcAZh-xS4JMdbSQtQmC2igULgiTWocugY3gX8qPEnqPVpSUetdyA8DlxXDQBH2kmgjzNG8nNJfdSEWY7yveAte8wdIsWShGARGd9VBKxZsoZKwr"/>
+</div>
+</div>
+</header>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-12 gap-gutter">
+<!-- 1. Drag-and-drop file upload zone -->
+<section class="col-span-12 lg:col-span-7 glass-card p-12 rounded-3xl flex flex-row items-center gap-8 relative overflow-hidden group">
+<div class="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+<div class="relative z-10 w-full flex flex-col items-center text-center space-y-6">
+<div class="w-24 h-24 rounded-2xl bg-surface-container flex items-center justify-center border border-white/10 group-hover:border-primary/40 transition-colors">
+<span class="material-symbols-outlined text-5xl text-primary" style="font-variation-settings: 'wght' 200;">upload_file</span>
+</div>
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface">Upload Resume</h3>
+<p class="text-on-surface-variant mt-2" id="upload-status">Drag and drop your PDF or DOCX file here</p>
+</div>
+<input type="file" id="resume-upload" accept=".pdf" class="hidden">
+<button id="browse-btn" onclick="document.getElementById('resume-upload').click()" class="gemini-bg text-white px-8 py-4 rounded-full font-semibold glow-button transition-all flex items-center gap-2 cursor-pointer">
+<span>Browse Files</span>
+<span class="material-symbols-outlined text-sm">open_in_new</span>
+</button>
+<p class="text-label-sm font-label-sm text-outline">Max size: 10MB • Secured with Aura encryption</p>
+</div>
+</section>
+<!-- 2. Job Description Text Area -->
+<section class="col-span-12 lg:col-span-5 glass-card p-8 rounded-3xl flex flex-col gap-6">
+<div class="flex items-center justify-between">
+<h3 class="font-headline-md text-headline-md text-on-surface">Job Description</h3>
+<span class="material-symbols-outlined text-outline">description</span>
+</div>
+<div class="relative flex-1">
+<textarea id="jd-input" class="w-full h-48 bg-surface-container-lowest border border-white/10 rounded-2xl p-6 text-on-surface placeholder:text-outline focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/50 transition-all resize-none" placeholder="Paste the target job description here for precision matching..."></textarea>
+</div>
+<div class="mt-4">
+<button id="analyze-btn" class="w-full gemini-bg text-white px-8 py-4 rounded-full font-semibold glow-button transition-all flex items-center justify-center gap-2 cursor-pointer">
+<span>Analyze Resume</span>
+<span class="material-symbols-outlined text-sm">auto_awesome</span>
+</button>
+</div>
+</section>
+<!-- 3. Analysis Section: Semantic Match Score -->
+<section class="col-span-12 lg:col-span-4 glass-card p-8 rounded-3xl flex flex-col items-center justify-center text-center relative">
+<div class="absolute top-6 left-6 flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20">
+<span class="material-symbols-outlined text-xs" style="font-variation-settings: 'FILL' 1;">bolt</span>
+<span class="text-xs font-bold text-primary uppercase tracking-widest">AI Prediction</span>
+</div>
+<div class="relative w-48 h-48 flex items-center justify-center">
+<!-- Progress Circle SVG -->
+<svg class="w-full h-full transform -rotate-90">
+<circle class="text-surface-container-highest" cx="96" cy="96" fill="transparent" r="88" stroke="currentColor" stroke-width="8"></circle>
+<circle class="pulse-animation" cx="96" cy="96" fill="transparent" r="88" stroke="url(#gemini-grad)" stroke-dasharray="552.92" stroke-dashoffset="33.17" stroke-linecap="round" stroke-width="12"></circle>
+<defs>
+<lineargradient id="gemini-grad" x1="0%" x2="100%" y1="0%" y2="100%">
+<stop offset="0%" style="stop-color:#4b85e8"></stop>
+<stop offset="50%" style="stop-color:#9b59b6"></stop>
+<stop offset="100%" style="stop-color:#e67e22"></stop>
+</lineargradient>
+</defs>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center">
+<span id="match-score" class="font-display-lg text-6xl font-bold gemini-gradient-text">--%</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-tighter">Match Score</span>
+</div>
+</div>
+<div id="ats-feedback" class="mt-8 text-on-surface-variant text-body-md text-left overflow-y-auto max-h-40">
+    Upload a resume and job description, then click Analyze.
+</div>
+</section>
+<!-- 4. Detailed Insights -->
+<section class="col-span-12 lg:col-span-8 grid grid-cols-1 md:grid-cols-3 gap-gutter">
+<!-- Keywords Card -->
+<div class="glass-card p-6 rounded-3xl flex flex-col gap-4">
+<div class="flex justify-between items-start">
+<div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">key</span>
+</div>
+<span id="skills-count" class="text-2xl font-bold text-on-surface">--</span>
+</div>
+<div>
+<h4 class="font-headline-md text-lg text-on-surface">Missing Skills</h4>
+<div id="missing-skills-container" class="flex flex-wrap gap-2 mt-4">
+<span class="text-on-surface-variant text-sm">No data yet</span>
+</div>
+</div>
+</div>
+<!-- Experience Card -->
+<div class="glass-card p-6 rounded-3xl flex flex-col gap-4">
+<div class="flex justify-between items-start">
+<div class="w-10 h-10 rounded-xl bg-secondary/10 flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined">timeline</span>
+</div>
+<span class="text-2xl font-bold text-on-surface">Perfect</span>
+</div>
+<div>
+<h4 class="font-headline-md text-lg text-on-surface">Experience Fit</h4>
+<div class="mt-4 flex items-end h-8 gap-1">
+<div class="flex-1 bg-secondary/20 h-[60%] rounded-t-sm"></div>
+<div class="flex-1 bg-secondary/20 h-[40%] rounded-t-sm"></div>
+<div class="flex-1 bg-secondary/20 h-[80%] rounded-t-sm"></div>
+<div class="flex-1 bg-secondary h-full rounded-t-sm shadow-[0_0_10px_rgba(210,188,255,0.4)]"></div>
+<div class="flex-1 bg-secondary/20 h-[70%] rounded-t-sm"></div>
+</div>
+</div>
+</div>
+<!-- Skills Card -->
+<div class="glass-card p-6 rounded-3xl flex flex-col gap-4">
+<div class="flex justify-between items-start">
+<div class="w-10 h-10 rounded-xl bg-tertiary/10 flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">workspace_premium</span>
+</div>
+<span class="text-2xl font-bold text-on-surface">Expert</span>
+</div>
+<div>
+<h4 class="font-headline-md text-lg text-on-surface">Skills Alignment</h4>
+<div class="mt-4 flex items-center gap-1 overflow-hidden">
+<div class="flex -space-x-2">
+<div class="w-6 h-6 rounded-full border border-background bg-primary-container"></div>
+<div class="w-6 h-6 rounded-full border border-background bg-secondary-container"></div>
+<div class="w-6 h-6 rounded-full border border-background bg-tertiary-container"></div>
+<div class="w-6 h-6 rounded-full border border-background bg-surface-container-highest flex items-center justify-center text-[8px]">+3</div>
+</div>
+<span class="text-label-sm text-outline ml-2">Top Skills Match</span>
+</div>
+</div>
+</div>
+<!-- Expanded Analytics/Graph area -->
+<div class="md:col-span-3 glass-card p-8 rounded-3xl">
+<div class="flex justify-between items-center mb-8">
+<h3 class="font-headline-md text-headline-md text-on-surface">Deep Analysis Visualization</h3>
+<div class="flex gap-2">
+<span class="px-4 py-1 rounded-full border border-white/10 text-xs bg-white/5">Semantic Relevance</span>
+<span class="px-4 py-1 rounded-full border border-white/10 text-xs bg-white/5">Industry Benchmark</span>
+</div>
+</div>
+<div class="h-48 w-full relative flex items-end gap-4">
+<!-- Abstract Waveform Visualization -->
+<div class="absolute inset-0 flex items-center justify-center opacity-10">
+<div class="w-full h-px bg-white/20"></div>
+</div>
+<div class="flex-1 gemini-bg opacity-30 h-[40%] rounded-t-xl transition-all hover:opacity-100 cursor-pointer"></div>
+<div class="flex-1 gemini-bg opacity-40 h-[65%] rounded-t-xl transition-all hover:opacity-100 cursor-pointer"></div>
+<div class="flex-1 gemini-bg opacity-20 h-[30%] rounded-t-xl transition-all hover:opacity-100 cursor-pointer"></div>
+<div class="flex-1 gemini-bg opacity-50 h-[85%] rounded-t-xl transition-all hover:opacity-100 cursor-pointer"></div>
+<div class="flex-1 gemini-bg opacity-60 h-[55%] rounded-t-xl transition-all hover:opacity-100 cursor-pointer"></div>
+<div class="flex-1 gemini-bg opacity-10 h-[25%] rounded-t-xl transition-all hover:opacity-100 cursor-pointer"></div>
+<div class="flex-1 gemini-bg opacity-80 h-[95%] rounded-t-xl transition-all hover:opacity-100 cursor-pointer"></div>
+<div class="flex-1 gemini-bg opacity-40 h-[60%] rounded-t-xl transition-all hover:opacity-100 cursor-pointer"></div>
+<div class="flex-1 gemini-bg opacity-20 h-[40%] rounded-t-xl transition-all hover:opacity-100 cursor-pointer"></div>
+<div class="flex-1 gemini-bg opacity-50 h-[70%] rounded-t-xl transition-all hover:opacity-100 cursor-pointer"></div>
+</div>
+<div class="flex justify-between mt-4 text-label-sm text-outline">
+<span>Foundation</span>
+<span>Experience</span>
+<span>Leadership</span>
+<span>Technical Deep-Dive</span>
+<span>Soft Skills</span>
+</div>
+</div>
+</section>
+</div>
+</main>
+<!-- Micro-interaction Scripts -->
+<script>
+        document.addEventListener('mousemove', (e) => {
+            const cards = document.querySelectorAll('.glass-card');
+            cards.forEach(card => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                if (x > 0 && y > 0 && x < rect.width && y < rect.height) {
+                    card.style.setProperty('--mouse-x', `${x}px`);
+                    card.style.setProperty('--mouse-y', `${y}px`);
+                }
+            });
+        });
+
+        // Backend Integration Logic
+        let selectedFile = null;
+        
+        document.getElementById('resume-upload').addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                selectedFile = e.target.files[0];
+                document.getElementById('upload-status').innerText = `Selected: ${selectedFile.name}`;
+                document.getElementById('upload-status').classList.add('text-primary');
+            }
+        });
+
+        document.getElementById('analyze-btn').addEventListener('click', async () => {
+            const jd = document.getElementById('jd-input').value;
+            const analyzeBtn = document.getElementById('analyze-btn');
+            
+            if (!selectedFile) {
+                alert("Please select a PDF resume first.");
+                return;
+            }
+            if (!jd) {
+                alert("Please paste a job description.");
+                return;
+            }
+
+            // UI Loading state
+            analyzeBtn.innerHTML = `<span>Analyzing with Gemini AI...</span><span class="material-symbols-outlined text-sm pulse-animation">hourglass_empty</span>`;
+            document.getElementById('match-score').innerText = "...";
+            document.getElementById('ats-feedback').innerText = "Running heavy vector calculations & AI analysis...";
+            
+            const formData = new FormData();
+            formData.append('resume', selectedFile);
+            formData.append('job_description', jd);
+
+            try {
+                const response = await fetch('http://127.0.0.1:8000/analyze', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                if (!response.ok) {
+                    throw new Error("Failed to analyze resume.");
+                }
+                
+                const data = await response.json();
+                
+                // Update UI with response data
+                document.getElementById('match-score').innerText = `${data.match_score}%`;
+                
+                if (data.feedback) {
+                    document.getElementById('ats-feedback').innerHTML = `
+                        <p class="font-bold mb-2">Summary:</p>
+                        <p class="mb-4">${data.feedback.match_summary}</p>
+                        <p class="font-bold mb-2">Bullet Point Improvements:</p>
+                        <ul class="list-disc pl-5">
+                            ${data.feedback.bullet_point_improvements.map(b => `<li class="mb-1">${b}</li>`).join('')}
+                        </ul>
+                    `;
+                    
+                    document.getElementById('skills-count').innerText = data.feedback.missing_skills.length;
+                    
+                    const skillsContainer = document.getElementById('missing-skills-container');
+                    skillsContainer.innerHTML = '';
+                    data.feedback.missing_skills.forEach(skill => {
+                        skillsContainer.innerHTML += `<span class="px-3 py-1 rounded-full bg-secondary/20 text-[12px] border border-secondary/40 text-secondary">${skill}</span>`;
+                    });
+                }
+                
+            } catch (error) {
+                alert("Error calling the API. Make sure FastAPI is running! " + error);
+                document.getElementById('ats-feedback').innerText = "Error analyzing resume.";
+            } finally {
+                analyzeBtn.innerHTML = `<span>Analyze Resume</span><span class="material-symbols-outlined text-sm">auto_awesome</span>`;
+            }
+        });
+    </script>
+</body></html>
