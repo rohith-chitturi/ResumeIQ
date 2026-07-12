@@ -27,69 +27,121 @@ def load_css():
     st.markdown("""
         <style>
         /* Base Dark Mode & Font */
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
         
         html, body, [class*="css"] {
-            font-family: 'Inter', sans-serif;
-            background-color: #0d1117;
-            color: #c9d1d9;
+            font-family: 'Outfit', sans-serif !important;
+            background-color: #131314 !important; /* Gemini dark background */
+            color: #e3e3e3 !important;
+        }
+
+        /* Sidebar Override */
+        [data-testid="stSidebar"] {
+            background-color: #1e1e20 !important;
+            border-right: 1px solid rgba(255, 255, 255, 0.05) !important;
         }
 
         /* Glassmorphism Cards */
         .glass-card {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border-radius: 15px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: #1e1e20;
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
             padding: 2rem;
             margin-bottom: 1rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
         .glass-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.6), 0 0 15px rgba(155, 114, 203, 0.2);
         }
         
         /* Headers */
         h1, h2, h3 {
-            color: #58a6ff !important;
-            font-weight: 700 !important;
+            color: #ffffff !important;
+            font-weight: 600 !important;
+            letter-spacing: -0.5px;
         }
 
-        /* Gradient Text for Main Title */
+        /* Gemini Gradient Text */
         .gradient-text {
-            background: linear-gradient(90deg, #58a6ff, #8a2be2);
+            background: linear-gradient(90deg, #4285f4, #9b72cb, #d96570, #4285f4);
+            background-size: 200% auto;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            font-size: 3rem;
-            font-weight: 800;
+            font-size: 3.5rem;
+            font-weight: 700;
             margin-bottom: 0.5rem;
+            animation: gradient-shimmer 4s linear infinite;
+        }
+
+        @keyframes gradient-shimmer {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 200% 50%; }
         }
 
         /* Subtitle */
         .subtitle {
             font-size: 1.2rem;
-            color: #8b949e;
+            color: #a0aab4;
             margin-bottom: 2rem;
+            font-weight: 400;
         }
         
-        /* Custom Button */
+        /* Custom Button (Pill shape with Gemini gradient) */
         .stButton>button {
-            background: linear-gradient(90deg, #58a6ff, #8a2be2) !important;
+            background: linear-gradient(90deg, #4285f4, #9b72cb, #d96570) !important;
             color: white !important;
             border: none !important;
-            border-radius: 8px !important;
-            padding: 0.5rem 2rem !important;
-            font-weight: 600 !important;
-            transition: opacity 0.3s ease !important;
+            border-radius: 50px !important;
+            padding: 0.6rem 2.5rem !important;
+            font-weight: 500 !important;
+            font-size: 1.1rem !important;
+            transition: all 0.3s ease !important;
+            box-shadow: 0 4px 15px rgba(155, 114, 203, 0.4) !important;
         }
         
         .stButton>button:hover {
-            opacity: 0.8 !important;
-            color: white !important;
+            box-shadow: 0 6px 20px rgba(155, 114, 203, 0.6), 0 0 15px rgba(217, 101, 112, 0.4) !important;
+            transform: scale(1.02) !important;
+        }
+
+        /* Inputs and Text Areas */
+        .stTextArea>div>div>textarea, .stFileUploader>div {
+            background-color: #1e1e20 !important;
+            border-radius: 16px !important;
+            border: 1px solid rgba(255,255,255,0.1) !important;
+            color: #e3e3e3 !important;
+            padding: 1rem !important;
+        }
+        .stTextArea>div>div>textarea:focus {
+            border-color: #9b72cb !important;
+            box-shadow: 0 0 10px rgba(155, 114, 203, 0.2) !important;
+        }
+
+        /* Progress bar */
+        .stProgress > div > div > div > div {
+            background-image: linear-gradient(90deg, #4285f4, #9b72cb, #d96570) !important;
+        }
+
+        /* Tags / Pills */
+        .skill-pill {
+            background: rgba(155, 114, 203, 0.15);
+            border: 1px solid rgba(155, 114, 203, 0.3);
+            color: #d8b4fe;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            margin-right: 8px;
+            display: inline-block;
+            margin-bottom: 8px;
+            backdrop-filter: blur(4px);
+            transition: all 0.2s ease;
+        }
+        .skill-pill:hover {
+            background: rgba(155, 114, 203, 0.25);
+            border-color: rgba(155, 114, 203, 0.6);
         }
         
         </style>
@@ -210,7 +262,7 @@ def main():
                                         st.markdown("#### 🎯 Missing Skills")
                                         for skill in feedback.missing_skills:
                                             # Using a nice pill-like tag design
-                                            st.markdown(f"<span style='background-color: #8a2be2; padding: 5px 10px; border-radius: 15px; font-size: 0.9em; margin-right: 5px; display: inline-block; margin-bottom: 5px;'>{skill}</span>", unsafe_allow_html=True)
+                                            st.markdown(f"<span class='skill-pill'>{skill}</span>", unsafe_allow_html=True)
                                             
                                     with col_bullets:
                                         st.markdown("#### ✨ Bullet Point Improvements")
