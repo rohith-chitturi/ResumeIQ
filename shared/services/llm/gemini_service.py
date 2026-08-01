@@ -4,6 +4,7 @@ from typing import Optional
 from google import genai
 from google.genai import types
 from pydantic import ValidationError
+from tenacity import retry, stop_after_attempt, wait_exponential
 
 from models.schemas import ATSFeedbackResponse
 from prompt.templates import PromptManager
@@ -51,6 +52,10 @@ class GeminiService:
             
         prompt = PromptManager.get_ats_analysis_prompt(resume_text, job_description)
         
+        return self._call_api_with_retry(prompt)
+        
+    @retry(stop=stop_after_attempt(3), wait=wait_exponential(multiplier=1, min=2, max=10))
+    def _call_api_with_retry(self, prompt: str) -> Optional[ATSFeedbackResponse]:
         try:
             # We use gemini-2.5-flash as it is fast and excellent at reasoning tasks
             # We pass our Pydantic schema to response_schema to enforce structured output.
