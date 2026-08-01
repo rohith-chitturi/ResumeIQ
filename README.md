@@ -1,26 +1,55 @@
-# ResumeIQ
+# ResumeIQ: Enterprise AI Retrieval Platform
 
-**ResumeIQ** is an AI-powered Resume Analyzer built with Python, Streamlit, and the Antigravity LLM. It helps professionals optimize their resumes against job descriptions by providing intelligent ATS feedback, semantic matching, and AI-driven rewrites.
+ResumeIQ is a production-grade AI platform designed to analyze, score, and rank resumes against job descriptions using deterministic explainability, Hybrid Vector Search (`pgvector`), and Large Language Models.
 
-## Project Goal
-To build a modular, scalable, and production-ready AI Resume Analyzer with a premium Glassmorphism UI.
+## 🌟 Key Features
+- **Deterministic Explainability**: Computes skill gaps and ATS matches natively before utilizing the LLM.
+- **Hybrid Semantic Search**: Leverages `pgvector` for embedding similarity search combined with rule-based ATS scoring.
+- **Enterprise Architecture**: Built using the Repository Pattern, Dependency Injection, and Abstract Interfaces.
+- **Multi-Container Infrastructure**: Fully dockerized with FastAPI, Streamlit, and Postgres (with Alembic migrations).
+- **Observability**: Health checks, versioning, and latency metrics tracking.
 
-## Tech Stack
-- **Python 3.10+**
-- **Streamlit** (UI Framework)
-- **PyMuPDF** (PDF Parsing)
-- **Sentence Transformers & FAISS** (Semantic Matching & Embeddings)
-- **Antigravity API** (LLM Rewrites & Feedback)
-- **Pydantic** (Data Validation)
+## 🏗 System Architecture
+```mermaid
+graph TD
+    A[Raw PDF] --> B(PDFParser)
+    B --> C(SectionParser)
+    C --> D(Skill Extraction)
+    D --> E(ATSEngine)
+    E --> F(Embedding Service)
+    F --> G(Hybrid Ranking & pgvector)
+    G --> H(Explainability Engine)
+    H --> I(LLM Provider)
+    I --> J{Structured JSON Dashboard}
+```
 
-## Phase 1
-- [x] Initialized Project Architecture
-- [x] Set up Virtual Environment & Dependencies
-- [x] Created Premium Streamlit Landing Page
-- [x] Initialized Git Repository
+## 📁 Repository Structure
+```text
+ResumeIQ/
+├── backend/          # FastAPI REST API & SQLAlchemy Repositories
+├── frontend/         # Streamlit Explainable Dashboard
+├── shared/           # Domain models, Orchestrator, AI Services, DI
+├── config/           # Pydantic Settings, Features, Dependencies
+├── docs/             # Architecture Decision Records (ADRs)
+├── scripts/          # CLI Tools (resumeiq analyze)
+├── infra/            # Docker, docker-compose
+└── .github/          # CI/CD Actions (Ruff, MyPy, Pytest)
+```
 
-## Phase 2
-- [x] Built `PDFParser` using PyMuPDF (fitz)
-- [x] Handled byte streams for direct Streamlit compatibility
-- [x] Removed Null bytes and handled whitespace cleaning
-- [x] Created unit tests for the parser using `pytest`
+## 🚀 Quick Start
+```bash
+# Clone the repository
+git clone https://github.com/rohith-chitturi/ResumeIQ.git
+cd ResumeIQ/infra
+
+# Spin up the AI Platform
+docker-compose up --build
+```
+- **Streamlit Dashboard**: `http://localhost:8501`
+- **FastAPI Swagger API**: `http://localhost:8000/docs`
+
+## 📊 API Endpoints
+- `GET /health`
+- `GET /metrics`
+- `POST /api/v1/analyze` (End-to-End Analysis)
+- `POST /api/v1/batch-analyze` (Async Batch Processing)
