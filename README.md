@@ -1,55 +1,68 @@
-# ResumeIQ: Enterprise AI Retrieval Platform
+# ResumeIQ: Enterprise AI Platform
 
-ResumeIQ is a production-grade AI platform designed to analyze, score, and rank resumes against job descriptions using deterministic explainability, Hybrid Vector Search (`pgvector`), and Large Language Models.
+ResumeIQ is a scalable, loosely-coupled AI Retrieval Platform. It evaluates resumes against job descriptions using semantic embeddings, deterministic ATS scoring, hybrid vector search (pgvector), and a fully decoupled RAG Pipeline architecture.
 
-## 🌟 Key Features
-- **Deterministic Explainability**: Computes skill gaps and ATS matches natively before utilizing the LLM.
-- **Hybrid Semantic Search**: Leverages `pgvector` for embedding similarity search combined with rule-based ATS scoring.
-- **Enterprise Architecture**: Built using the Repository Pattern, Dependency Injection, and Abstract Interfaces.
-- **Multi-Container Infrastructure**: Fully dockerized with FastAPI, Streamlit, and Postgres (with Alembic migrations).
-- **Observability**: Health checks, versioning, and latency metrics tracking.
+## 🏗️ System Architecture
 
-## 🏗 System Architecture
+ResumeIQ abandons the monolithic "LLM script" approach in favor of a mature **Pipeline Context Engine**. 
+
 ```mermaid
 graph TD
-    A[Raw PDF] --> B(PDFParser)
-    B --> C(SectionParser)
-    C --> D(Skill Extraction)
-    D --> E(ATSEngine)
-    E --> F(Embedding Service)
-    F --> G(Hybrid Ranking & pgvector)
-    G --> H(Explainability Engine)
-    H --> I(LLM Provider)
-    I --> J{Structured JSON Dashboard}
+    A[API Router] --> B(Pipeline Engine)
+    B --> C{PipelineContext}
+    
+    subgraph Stages
+        D(ParseStage)
+        E(EmbeddingStage)
+        F(ConstraintStage)
+        G(RetrieveStage)
+        H(LLMStage)
+        I(ValidationStage)
+    end
+    
+    C --> D
+    D --> C
+    C --> E
+    E --> C
+    C --> F
+    F --> C
+    C --> G
+    G --> C
+    C --> H
+    H --> C
+    C --> I
 ```
 
-## 📁 Repository Structure
-```text
-ResumeIQ/
-├── backend/          # FastAPI REST API & SQLAlchemy Repositories
-├── frontend/         # Streamlit Explainable Dashboard
-├── shared/           # Domain models, Orchestrator, AI Services, DI
-├── config/           # Pydantic Settings, Features, Dependencies
-├── docs/             # Architecture Decision Records (ADRs)
-├── scripts/          # CLI Tools (resumeiq analyze)
-├── infra/            # Docker, docker-compose
-└── .github/          # CI/CD Actions (Ruff, MyPy, Pytest)
-```
+### Key Architectural Tradeoffs
+* **Why pgvector?** To perform mathematically precise similarity search within the same database engine holding relational candidate data, completely eliminating the need for a separate vector database (e.g., Pinecone).
+* **Why Pipeline Context?** By passing a single `PipelineContext` across atomic stages (`Parse`, `Constraint`, `LLM`), we prevent parameter-bloat and isolate side-effects. This architecture is structurally similar to robust ML frameworks like LangChain without the massive overhead.
+* **Why Hybrid Retrieval?** Relying purely on semantic search misses critical exact-match keywords (e.g., "Kubernetes"). We implemented a deterministic Gap Analysis (`ExplainabilityEngine`) to explicitly calculate exact-match missing skills *before* handing context to the LLM.
 
-## 🚀 Quick Start
+## 🚀 Core Features
+1. **Resume Tailoring Pipeline**: Dynamically extracts constraints and re-writes the resume.
+2. **Recruiter Simulator Pipeline**: Evaluates candidates concurrently against 3 distinct personas (ATS Bot, Engineering Manager, HR).
+3. **Multi-Job Optimization**: A pure deterministic (no-LLM) batch processor that matches 1 candidate against 10+ jobs to rapidly identify the highest probability role.
+4. **Production RAG Engine**: Retrieves FAANG formatting best practices and injects them into the context before generating LLM outputs.
+5. **Decoupled Observability**: Stages emit `PipelineEvents` that independent listeners catch for latency tracking and MLOps benchmarking.
+
+## 🛠️ Installation & Setup
 ```bash
 # Clone the repository
 git clone https://github.com/rohith-chitturi/ResumeIQ.git
-cd ResumeIQ/infra
+cd ResumeIQ
 
-# Spin up the AI Platform
-docker-compose up --build
+# Start PostgreSQL + pgvector
+docker-compose up -d
+
+# Install dependencies and start the API
+pip install -r requirements.txt
+uvicorn backend.api.main:app --reload
 ```
-- **Streamlit Dashboard**: `http://localhost:8501`
-- **FastAPI Swagger API**: `http://localhost:8000/docs`
 
-## 📊 API Endpoints
-- `GET /health`
-- `GET /metrics`
-- `POST /api/v1/analyze` (End-to-End Analysis)
-- `POST /api/v1/batch-analyze` (Async Batch Processing)
+## 🗺️ Version Roadmap
+* **v1.0**: Production Base (FastAPI, pgvector, Provider Interfaces)
+* **v2.0**: Pipeline Architecture & Events
+* **v2.2**: Resume Intelligence & Simulator
+* **v2.4**: RAG Engine Integration
+* **v2.5 (Current)**: MLOps Experiment Tracking
+* **v3.0**: Frozen.
