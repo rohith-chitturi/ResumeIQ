@@ -30,6 +30,7 @@ class PipelineContext(BaseModel):
     constraints: List[str] = Field(default_factory=list)
     
     # Output Data
+    retrieved_knowledge: str = ""
     llm_output: Optional[Any] = None
     confidence_score: float = 0.0
     
