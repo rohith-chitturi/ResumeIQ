@@ -1,15 +1,9 @@
-# ResumeIQ: Enterprise AI Retrieval Platform
+# ResumeIQ
 
-ResumeIQ is a production-grade AI platform designed to analyze, score, and rank resumes against job descriptions using deterministic explainability, Hybrid Vector Search (`pgvector`), and Large Language Models.
+ResumeIQ is an AI Retrieval Platform that analyzes resumes against job descriptions using semantic embeddings, deterministic ATS scoring, hybrid vector search, and LLM-powered recommendations. The platform combines explainable AI with a modular backend architecture to demonstrate modern AI engineering practices.
 
-## 🌟 Key Features
-- **Deterministic Explainability**: Computes skill gaps and ATS matches natively before utilizing the LLM.
-- **Hybrid Semantic Search**: Leverages `pgvector` for embedding similarity search combined with rule-based ATS scoring.
-- **Enterprise Architecture**: Built using the Repository Pattern, Dependency Injection, and Abstract Interfaces.
-- **Multi-Container Infrastructure**: Fully dockerized with FastAPI, Streamlit, and Postgres (with Alembic migrations).
-- **Observability**: Health checks, versioning, and latency metrics tracking.
+## System Architecture
 
-## 🏗 System Architecture
 ```mermaid
 graph TD
     A[Raw PDF] --> B(PDFParser)
@@ -22,6 +16,18 @@ graph TD
     H --> I(LLM Provider)
     I --> J{Structured JSON Dashboard}
 ```
+
+## Concrete Capabilities
+
+- **FastAPI Backend**: Asynchronous REST API managing the orchestration layer.
+- **PostgreSQL + pgvector**: Stores resume embeddings and performs fast similarity searches.
+- **Hybrid Semantic Retrieval**: Combines pgvector cosine distance (70%) with rule-based ATS scoring (30%).
+- **Explainable ATS Scoring**: A deterministic Explainability Engine computes missing skills and match metrics natively.
+- **Modular Provider Interfaces**: Swap between Gemini/OpenAI or SentenceTransformers/VoyageAI seamlessly.
+- **Dependency Injection**: Centralized configuration and service injection for testability.
+- **Repository Pattern**: Strict decoupling of business logic from SQLAlchemy ORM operations.
+- **Dockerized Deployment**: Multi-container setup (Frontend, Backend, Database) managed via Docker Compose.
+- **Continuous Integration**: Automated GitHub Actions running Ruff, MyPy, and Pytest.
 
 ## 📁 Repository Structure
 ```text
