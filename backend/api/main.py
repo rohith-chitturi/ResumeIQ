@@ -9,6 +9,10 @@ from embedding.vectorizer import EmbeddingService
 from similarity.matcher import SemanticMatcher
 from llm.gemini_service import GeminiService
 from models.schemas import ATSFeedbackResponse
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
 
 app = FastAPI(title="ResumeIQ API", description="AI Resume Analyzer API", version="1.0.0")
 
