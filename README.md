@@ -59,3 +59,27 @@ docker-compose up --build
 - `GET /metrics`
 - `POST /api/v1/analyze` (End-to-End Analysis)
 - `POST /api/v1/batch-analyze` (Async Batch Processing)
+
+## 🗺 Technical Roadmap
+
+To prevent feature creep and ensure a high-quality portfolio piece, ResumeIQ follows a strict versioned release schedule.
+
+### ✅ v1.0: Production AI Platform (Current)
+- FastAPI, Streamlit, Docker, PostgreSQL + pgvector
+- Deterministic Explainability Engine & Hybrid Vector Search
+- Repository Pattern & Dependency Injection
+
+### 🚧 v2.0: AI Intelligence (Next)
+- **Resume Tailoring**: Generate dynamically optimized resumes for specific target companies (Google, JPMC, etc.).
+- **Multi-Job Optimization**: Rank one resume against 10 JDs simultaneously.
+- **Interview Readiness**: Generate likely behavioral and technical questions based on identified resume gaps.
+- **Recruiter Simulator**: Multi-perspective LLM critiques (ATS vs. Recruiter vs. Engineering Manager).
+
+### 🔮 v3.0: Knowledge & RAG
+- Integrate Retrieval-Augmented Generation (RAG) using curated HR knowledge bases, ATS best practices, and company-specific hiring guides.
+
+### 🤖 v4.0: Agentic AI
+- Transition from a linear pipeline to a multi-agent workflow (Manager Agent, Parser Agent, ATS Agent, Optimization Agent).
+
+### 🏢 v5.0: Enterprise Recruitment Platform
+- Auth (JWT/OAuth), Team/Organization management, and an HR candidate-tracking dashboard.
