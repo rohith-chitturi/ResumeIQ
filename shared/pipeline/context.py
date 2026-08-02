@@ -2,6 +2,7 @@ import uuid
 from datetime import datetime
 from typing import Any, Dict, List, Optional
 from pydantic import BaseModel, Field
+from shared.domain.models import Decision
 
 
 class ValidationState(BaseModel):
@@ -28,6 +29,7 @@ class PipelineContext(BaseModel):
     embeddings: Dict[str, List[float]] = Field(default_factory=dict)
     ats_score: Optional[float] = None
     constraints: List[str] = Field(default_factory=list)
+    decisions: List[Decision] = Field(default_factory=list)
     
     # Output Data
     retrieved_knowledge: str = ""

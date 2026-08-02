@@ -1,0 +1,9 @@
+# Configuration for Deterministic Decision Engine
+# Defines the ATS point impact for various resume improvements.
+
+weights:
+  critical_skill: 8
+  preferred_skill: 4
+  project_alignment: 6
+  keyword_alignment: 3
+  formatting: 2

@@ -39,11 +39,12 @@ graph TD
 * **Why Hybrid Retrieval?** Relying purely on semantic search misses critical exact-match keywords (e.g., "Kubernetes"). We implemented a deterministic Gap Analysis (`ExplainabilityEngine`) to explicitly calculate exact-match missing skills *before* handing context to the LLM.
 
 ## 🚀 Core Features
-1. **Resume Tailoring Pipeline**: Dynamically extracts constraints and re-writes the resume.
-2. **Recruiter Simulator Pipeline**: Evaluates candidates concurrently against 3 distinct personas (ATS Bot, Engineering Manager, HR).
-3. **Multi-Job Optimization**: A pure deterministic (no-LLM) batch processor that matches 1 candidate against 10+ jobs to rapidly identify the highest probability role.
-4. **Production RAG Engine**: Retrieves FAANG formatting best practices and injects them into the context before generating LLM outputs.
-5. **Decoupled Observability**: Stages emit `PipelineEvents` that independent listeners catch for latency tracking and MLOps benchmarking.
+1. **Decision Intelligence Engine**: A deterministic rule-engine that builds explicit `Decision` objects (complete with ATS impact estimates and knowledge retrieval traces) *before* invoking the Generative LLM. The LLM is strictly used as a presentation layer.
+2. **Resume Tailoring Pipeline**: Dynamically extracts constraints and re-writes the resume.
+3. **Recruiter Simulator Pipeline**: Evaluates candidates concurrently against 3 distinct personas (ATS Bot, Engineering Manager, HR).
+4. **Multi-Job Optimization**: A pure deterministic (no-LLM) batch processor that matches 1 candidate against 10+ jobs to rapidly identify the highest probability role.
+5. **Production RAG Engine**: Retrieves FAANG formatting best practices and injects them into the context before generating LLM outputs.
+6. **Decoupled Observability**: Stages emit `PipelineEvents` that independent listeners catch for latency tracking and MLOps benchmarking.
 
 ## 🛠️ Installation & Setup
 ```bash
