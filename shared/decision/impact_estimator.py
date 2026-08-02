@@ -1,5 +1,6 @@
 import yaml
 import os
+from typing import Dict, Any
 
 class ImpactEstimator:
     """Estimates ATS score impact deterministically based on YAML weights."""
@@ -13,12 +14,15 @@ class ImpactEstimator:
         else:
             # Fallback defaults
             self.weights = {
-                "critical_skill": 8,
-                "preferred_skill": 4,
-                "project_alignment": 6,
-                "formatting": 2
+                "critical_skill": {"value": 8, "rationale": "Fallback critical skill"},
             }
             
     def estimate_impact(self, decision_category: str) -> int:
         """Returns the estimated ATS points gained for a decision category."""
-        return self.weights.get(decision_category, 1)
+        category_data = self.weights.get(decision_category, {"value": 1})
+        return category_data.get("value", 1)
+
+    def get_rationale(self, decision_category: str) -> str:
+        """Returns the rationale for the weight configuration."""
+        category_data = self.weights.get(decision_category, {"rationale": "General improvement"})
+        return category_data.get("rationale", "General improvement")
