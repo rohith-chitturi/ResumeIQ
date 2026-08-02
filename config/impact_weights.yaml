@@ -1,9 +1,22 @@
-# Configuration for Deterministic Decision Engine
-# Defines the ATS point impact for various resume improvements.
+version: 1.0
 
 weights:
-  critical_skill: 8
-  preferred_skill: 4
-  project_alignment: 6
-  keyword_alignment: 3
-  formatting: 2
+  critical_skill:
+    value: 8
+    rationale: "Required by target job"
+
+  preferred_skill:
+    value: 4
+    rationale: "Preferred but not mandatory"
+
+  project_alignment:
+    value: 6
+    rationale: "Demonstrates applied competency"
+
+  keyword_alignment:
+    value: 3
+    rationale: "Improves general ATS text matching"
+
+  formatting:
+    value: 2
+    rationale: "Improves ATS readability"
